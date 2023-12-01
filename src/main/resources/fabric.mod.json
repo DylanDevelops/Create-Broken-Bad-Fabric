@@ -4,9 +4,9 @@
   "version": "${version}",
   "name": "Create: Broken Bad",
   "description": "An addon for Create inspired by Breaking Bad and loosely based on science.",
-  "authors": [],
+  "authors": ["Forked by Dylan R."],
   "contact": {
-    "repo": "https://github.com/exzotic5485/CreateBrokenBad"
+    "repo": "https://github.com/DylanDevelops/Create-Broken-Bad-Fabric"
   },
   "license": "MIT",
   "icon": "assets/createbb/icon.png",
