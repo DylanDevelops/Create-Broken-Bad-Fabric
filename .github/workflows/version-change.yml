@@ -1,0 +1,28 @@
+name: Detect version change and create PR
+
+on:
+  push:
+    paths:
+      - 'gradle-properties'
+
+jobs:
+  createPR:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get changed version
+        id: version
+        run: |
+          VERSION=$(grep -oP 'mod_version\s*=\s*\K.*' gradle.properties)
+          echo "::set-output name=version::$VERSION"
+        
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update version to ${{ steps.version.outputs.version }}"
+          title: "Release v${{ steps.version.outputs.version }}"
+          body: "Update version to v${{ steps.version.outputs.version }}"
+          branch: "releases/${{ steps.version.outputs.version }}"
