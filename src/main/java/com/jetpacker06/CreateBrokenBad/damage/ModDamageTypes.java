@@ -10,9 +10,13 @@ import net.minecraft.world.level.Level;
 
 public class ModDamageTypes {
     public static final ResourceKey<DamageType> OVERDOSE_DAMAGE_TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("createbb", "overdose_damage"));
-    
-     public static DamageSource of(Level level, ResourceKey<DamageType> key) {
+
+    public static DamageSource of(Level level, ResourceKey<DamageType> key) {
          DamageType damageType = level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).get(key);
          return new DamageSource(Holder.direct(damageType));
-     }
+    }
+
+    public static DamageSource overdoseDamage(Level level) {
+        return of(level, OVERDOSE_DAMAGE_TYPE);
+    }
 }

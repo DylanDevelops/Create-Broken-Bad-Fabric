@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -86,8 +85,7 @@ public class MethItem extends Item {
 
                 // If the count hits 0, kill the player
                 if(currentCount - 1 <= 0) {
-                    DamageSource overdoseDamage = ModDamageTypes.of(player.level(), ModDamageTypes.OVERDOSE_DAMAGE_TYPE);
-                    player.die(overdoseDamage);
+                    player.hurt(ModDamageTypes.overdoseDamage(player.level()), Float.MAX_VALUE);
                 }
             } else {
                 // If the player does not have the MethItem effect, reset the count
