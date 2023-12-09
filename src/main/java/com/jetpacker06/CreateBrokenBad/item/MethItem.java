@@ -1,11 +1,10 @@
 package com.jetpacker06.CreateBrokenBad.item;
 
 import com.jetpacker06.CreateBrokenBad.block.TrayBlock;
+import com.jetpacker06.CreateBrokenBad.damage.ModDamageTypes;
 import com.jetpacker06.CreateBrokenBad.register.CBBBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TextComponentTagVisitor;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -63,9 +62,6 @@ public class MethItem extends Item {
         return UseAnim.EAT; // Displays the eating animation when the player uses the item
     }
 
-    // Defines a unique effect for the MethItem (STILL NEED TO FINISH THIS)
-//    public static final MobEffect METH_EFFECT = new MobEffect(MobEffectCategory.BENEFICIAL, 0x98D982) {};
-
     @Override
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level world, @NotNull LivingEntity livingEntity) {
         // Add the speed effect to the player for 200 ticks (10 seconds) at amplifier 1
@@ -74,27 +70,29 @@ public class MethItem extends Item {
             int duration = (this instanceof MethItem.White) ? 300 : 1200;
             // amplified by 2 if white meth and 4 if blue meth
             int amplifier = (this instanceof MethItem.White) ? 2 : 4;
-            CompoundTag playerData = player.getCustomData();
 
             // checks if the player already has the methItem effect
-            if(player.hasEffect(MobEffects.MOVEMENT_SPEED)) {
-                // Gets the current count from the player's data
-                int currentCount = playerData.getInt("MethEffectCount");
+            if(!player.isCreative()) {
+                CompoundTag playerData = player.getCustomData();
 
-                // Increment the count and store it in the player's data
-                playerData.putInt("MethEffectCount", currentCount - 1);
+                if(player.hasEffect(MobEffects.MOVEMENT_SPEED)) {
+                    // Gets the current count from the player's data
+                    int currentCount = playerData.getInt("MethEffectCount");
 
-                // If the count hits 0, kill the player
-                if(currentCount - 1 <= 0) {
-                    player.kill();
+                    // Increment the count and store it in the player's data
+                    playerData.putInt("MethEffectCount", currentCount + 1);
+
+                    // If the count hits 0, kill the player
+                    if(currentCount + 1 >= 5) {
+                        player.hurt(ModDamageTypes.overdoseDamage(player.level()), Float.MAX_VALUE);
+                    }
+                } else {
+                    // If the player does not have the MethItem effect, reset the count
+                    playerData.putInt("MethEffectCount", 0);
                 }
-            } else {
-                // If the player does not have the MethItem effect, reset the count
-                playerData.putInt("MethEffectCount", 5);
             }
 
-            // Still need to finish this!
-//            player.addEffect(new MobEffectInstance(METH_EFFECT, duration, 4));
+
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, amplifier));
 
             // Remove that instance of item from inventory

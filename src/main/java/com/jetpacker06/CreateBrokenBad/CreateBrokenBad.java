@@ -1,5 +1,6 @@
 package com.jetpacker06.CreateBrokenBad;
 
+import com.jetpacker06.CreateBrokenBad.damage.ModDamageTypes;
 import com.jetpacker06.CreateBrokenBad.register.*;
 import com.tterrag.registrate.Registrate;
 import net.fabricmc.api.ClientModInitializer;
