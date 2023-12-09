@@ -1,16 +1,16 @@
 package com.jetpacker06.CreateBrokenBad.item;
 
 import com.jetpacker06.CreateBrokenBad.block.TrayBlock;
+import com.jetpacker06.CreateBrokenBad.damage.ModDamageTypes;
 import com.jetpacker06.CreateBrokenBad.register.CBBBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TextComponentTagVisitor;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -86,7 +86,8 @@ public class MethItem extends Item {
 
                 // If the count hits 0, kill the player
                 if(currentCount - 1 <= 0) {
-                    player.kill();
+                    DamageSource overdoseDamage = ModDamageTypes.of(player.level(), ModDamageTypes.OVERDOSE_DAMAGE_TYPE);
+                    player.die(overdoseDamage);
                 }
             } else {
                 // If the player does not have the MethItem effect, reset the count

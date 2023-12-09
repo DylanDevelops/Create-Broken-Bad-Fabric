@@ -58,6 +58,8 @@
   "brass_call_bell_tooltip": "§8Ding!",
   "ephedra_tooltip": "§8Buy it from farmers.",
 
+  "death.attack.overdose": "%1$s overdosed on Methamphetamine!",
+
 
   "itemGroup.CreateBB": "Create: Broken Bad"
 }
