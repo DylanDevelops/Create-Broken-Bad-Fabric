@@ -64,42 +64,24 @@ public class MethItem extends Item {
 
     @Override
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level world, @NotNull LivingEntity livingEntity) {
-        // Add the speed effect to the player for 200 ticks (10 seconds) at amplifier 1
         if (livingEntity instanceof Player player) {
-            // 15 seconds for white meth and one minute forH blue meth
             int duration = (this instanceof MethItem.White) ? 300 : 1200;
-            // amplified by 2 if white meth and 4 if blue meth
             int amplifier = (this instanceof MethItem.White) ? 2 : 4;
-
-            // checks if the player already has the methItem effect
             if(!player.isCreative()) {
                 CompoundTag playerData = player.getCustomData();
-
                 if(player.hasEffect(MobEffects.MOVEMENT_SPEED)) {
-                    // Gets the current count from the player's data
                     int currentCount = playerData.getInt("MethEffectCount");
-
-                    // Increment the count and store it in the player's data
                     playerData.putInt("MethEffectCount", currentCount + 1);
-
-                    // If the count hits 0, kill the player
                     if(currentCount + 1 >= 5) {
-                        player.hurt(ModDamageTypes.overdoseDamage(player.level()), Float.MAX_VALUE);
+                        player.hurt(ModDamageTypes.overdoseDamage(player.level()), 250);
                     }
                 } else {
-                    // If the player does not have the MethItem effect, reset the count
                     playerData.putInt("MethEffectCount", 0);
                 }
             }
-
-
             player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, amplifier));
-
-            // Remove that instance of item from inventory
             if(!player.isCreative()) stack.shrink(1);
         }
-
-        // Call the super method to decrease the item stack size and play the eating sound
         return super.finishUsingItem(stack, world, livingEntity);
     }
 
